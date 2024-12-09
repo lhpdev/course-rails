@@ -95,6 +95,10 @@ GEM
       railties (>= 4.1.0)
       responders
       warden (~> 1.2.3)
+    dotenv (3.1.4)
+    dotenv-rails (3.1.4)
+      dotenv (= 3.1.4)
+      railties (>= 6.1)
     erubi (1.13.0)
     globalid (1.2.1)
       activesupport (>= 6.1)
@@ -188,6 +192,7 @@ GEM
       actionpack (>= 5.2)
       railties (>= 5.2)
     rexml (3.3.9)
+    ruby_http_client (3.5.5)
     rubyzip (2.3.2)
     selenium-webdriver (4.26.0)
       base64 (~> 0.2)
@@ -195,6 +200,8 @@ GEM
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2, < 3.0)
       websocket (~> 1.0)
+    sendgrid-ruby (6.7.0)
+      ruby_http_client (~> 3.4)
     sprockets (4.2.1)
       concurrent-ruby (~> 1.0)
       rack (>= 2.2.4, < 4)
@@ -237,12 +244,14 @@ DEPENDENCIES
   capybara
   debug
   devise
+  dotenv-rails
   importmap-rails
   jbuilder
   pg (~> 1.1)
   puma (~> 5.0)
   rails (~> 7.0.8, >= 7.0.8.6)
   selenium-webdriver
+  sendgrid-ruby
   sprockets-rails
   stimulus-rails
   tailwindcss-rails (~> 2.0)
