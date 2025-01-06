@@ -17,10 +17,11 @@ class EvaluationsController < ApplicationController
 
   def create
     @evaluation = current_user.sections.build(evaluation_params)
+    @evaluation.section_type = 1
 
     respond_to do |format|
       if @evaluation.save
-        format.html { redirect_to @evaluation, notice: "Evaluation was successfully created." }
+        format.turbo_stream { render turbo_stream: turbo_stream.replace("evaluations_all", partial: "evaluations/evaluations", locals: { evaluations: Section.all }) }
       else
         format.html { render :new, status: :unprocessable_entity }
       end
