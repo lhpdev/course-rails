@@ -1,53 +1,45 @@
 class ChaptersController < ApplicationController
   before_action :set_chapter, only: %i[ show edit update destroy ]
 
-  # GET /chapters or /chapters.json
   def index
-    @chapters = Section.all
+    @chapters = Section.grab_all_chapters
   end
 
-  # GET /chapters/1 or /chapters/1.json
   def show
   end
 
   # GET /chapters/new
   def new
-    @chapter = Chapter.new
+    @chapter = Section.new
   end
 
   # GET /chapters/1/edit
   def edit
   end
 
-  # POST /chapters or /chapters.json
   def create
-    @chapter = Chapter.new(chapter_params)
+    @chapter = current_user.sections.build(chapter_params)
+    @chapter.section_type= 2
 
     respond_to do |format|
       if @chapter.save
-        format.html { redirect_to @chapter, notice: "Chapter was successfully created." }
-        format.json { render :show, status: :created, location: @chapter }
+        format.turbo_stream { render turbo_stream: turbo_stream.replace("chapters_all", partial: "chapters/chapters", locals: { chapters: Section.grab_all_chapters }) }
       else
         format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @chapter.errors, status: :unprocessable_entity }
       end
     end
   end
 
-  # PATCH/PUT /chapters/1 or /chapters/1.json
   def update
     respond_to do |format|
       if @chapter.update(chapter_params)
-        format.html { redirect_to @chapter, notice: "Chapter was successfully updated." }
-        format.json { render :show, status: :ok, location: @chapter }
+        format.turbo_stream { render turbo_stream: turbo_stream.replace("section_#{@chapter.id}", template: "chapters/show") }
       else
         format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @chapter.errors, status: :unprocessable_entity }
       end
     end
   end
 
-  # DELETE /chapters/1 or /chapters/1.json
   def destroy
     @chapter.destroy
 
@@ -60,11 +52,11 @@ class ChaptersController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_chapter
-      @chapter = Chapter.find(params[:id])
+      @chapter = Section.find(params[:id])
     end
 
     # Only allow a list of trusted parameters through.
     def chapter_params
-      params.require(:chapter).permit(:name, :description, :type, :body, :user_id)
+      params.require(:section).permit(:name, :description, :body)
     end
 end
