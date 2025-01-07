@@ -31,7 +31,7 @@ class EvaluationsController < ApplicationController
   def update
     respond_to do |format|
       if @evaluation.update(evaluation_params)
-        format.html { redirect_to @evaluation, notice: "Evaluation was successfully updated." }
+        format.turbo_stream { render turbo_stream: turbo_stream.replace("section_#{@evaluation.id}", template: "evaluations/show") }
       else
         format.html { render :edit, status: :unprocessable_entity }
       end
@@ -48,7 +48,7 @@ class EvaluationsController < ApplicationController
 
   private
     def set_evaluation
-      @evaluation = Evaluation.find(params[:id])
+      @evaluation = Section.find(params[:id])
     end
 
     def evaluation_params
